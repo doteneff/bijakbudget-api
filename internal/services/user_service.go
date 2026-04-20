@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"os"
 
 	"github.com/doteneff/bijakbudget-api/internal/models"
 	"github.com/doteneff/bijakbudget-api/internal/repositories"
@@ -70,8 +71,9 @@ func (s *userService) LoginUser(email, password string) (*models.AuthResponse, e
 }
 
 func (s *userService) LoginSSOGoogle(token string) (*models.AuthResponse, error) {
-	// You may need to provide client ID if checking audience
-	payload, err := idtoken.Validate(context.Background(), token, "")
+	// Provide client ID from environment for security
+	clientID := os.Getenv("GOOGLE_CLIENT_ID")
+	payload, err := idtoken.Validate(context.Background(), token, clientID)
 	if err != nil {
 		return nil, errors.New("invalid google token: " + err.Error())
 	}
