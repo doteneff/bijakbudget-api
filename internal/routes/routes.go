@@ -52,7 +52,9 @@ func SetupRouter(r *gin.Engine) {
 		// Users routes
 		users := api.Group("/users")
 		{
-			users.POST("/", userHandler.Create)
+			users.POST("/register", userHandler.Register)
+			users.POST("/login", userHandler.Login)
+			users.POST("/sso/google", userHandler.SSOGoogle)
 			users.GET("/:id", userHandler.GetByID)
 		}
 	}
